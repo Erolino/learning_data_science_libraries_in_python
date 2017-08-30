@@ -10,7 +10,7 @@ import pandas as pd
 #cf.go_offline()
 
 df = pd.read_pickle('ny_daily')
-#print(df.head())
+print(df.head())
 
 app = dash.Dash()
 
@@ -25,6 +25,18 @@ specification of Markdown.
 Check out their [60 Second Markdown Tutorial](http://commonmark.org/help/)
 if this is your first introduction to Markdown!
 '''
+traces = [go.Scatter(
+                    x = df['Adults'],
+                    y = df['Net Amount'],
+                    mode = 'markers',
+                    name = 'Net Revenue'
+                ),
+                go.Scatter(
+                    x = df['Adults'],
+                    y = df['Capacity'],
+                    mode = 'markers',
+                    name = 'Capacity'
+                )]
 
 app.layout = html.Div(children=[
     html.H1(children=h1),
@@ -36,36 +48,13 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='example-graph',
         figure={
-            'data': [
-                go.Scatter(
-                    x = df['Adults'],
-                    y = df['Net Amount'],
-                    mode = 'markers'
-                ),
-                go.Scatter(
-                    x = df['Adults'],
-                    y = df['Capacity'],
-                    mode = 'markers'
-                )
-            ],
+            'data': traces,
             'layout': {
                 'title' : 'Dash Data Visualization'
 
             }
         }
-    ),
-
-        dcc.Graph(
-            id='example-graph',
-            figure={
-                'data': [
-                    {'x': df['Adults'], 'y': df['Net Amount'], 'type': 'scatter', 'mode': 'markers'}
-                ],
-                'layout': {
-                    'title' : 'Dash Data Visualization'
-                }
-            }
-        )
+    )
 ])
 
 

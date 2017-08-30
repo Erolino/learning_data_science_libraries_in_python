@@ -37,9 +37,9 @@ app.layout = html.Div(children=[
 
     html.Div([
         dcc.Dropdown(
-            id = 'route_selection',
+            id = 'pick_drop_selection',
             options = [{'label': route, 'value': route} for route in routes],
-            multi = True
+
         )
     ],
     style={'width': '48%', 'display': 'inline-block'}),
@@ -47,7 +47,7 @@ app.layout = html.Div(children=[
     html.Div([
         dcc.Dropdown(
             id = 'yaxis_catagory',
-            options = [{'label': item, 'value': item} for item in ['Adults','Net Amount','Occupancy']],
+            options = [{'label': item, 'value': item} for item in ['Adults','Net Amount']],
             value = 'Net Amount'
         )
     ],
@@ -55,14 +55,7 @@ app.layout = html.Div(children=[
 
     html.Div([
         dcc.Graph(
-            id='stops',
-            figure={
-                'data': traces,
-                'layout': {
-                    'title' : 'NY to DC Revenue by Day of the Week'
-
-                }
-            }
+            id='weekly_sales',
         )
     ], style={'width': '100%', 'display': 'inline-block', 'padding': '0 20'}),
 
@@ -75,6 +68,29 @@ app.layout = html.Div(children=[
 
 ])
 
+
+@app.callback(
+    dash.dependencies.Output('weekly_sales','figure'),
+    [dash.dependencies.Input('yaxis_catagory','value'),
+    dash.dependencies.Input('pick_drop_selection','value')])
+
+def update_weekly_sales(yaxis_catagory_name, pick_drop_selection_name):
+    filtered_df = sales_by_city[sales_by_city['Route Name']==pick_drop_selection_name]
+    #filtered_df = sales_by_city
+    traces = []    
+
+    traces.append(go.Scatter(
+        x = filtered_df['Travel Date'],
+        y = filtered_df[yaxis_catagory_name],
+        mode = 'lines'
+        ))
+
+    return {
+        'data': traces,
+        'layout': {
+        'title' : 'NY to DC Revenue by Day of the Week'
+        }
+    }
 
 @app.callback(
     dash.dependencies.Output('weekly_growth_by_day','figure'),

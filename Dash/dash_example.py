@@ -37,35 +37,13 @@ app.layout = html.Div(children=[
         id='example-graph',
         figure={
             'data': [
-                go.Scatter(
-                    x = df['Adults'],
-                    y = df['Net Amount'],
-                    mode = 'markers'
-                ),
-                go.Scatter(
-                    x = df['Adults'],
-                    y = df['Capacity'],
-                    mode = 'markers'
-                )
+                {'x': df['Adults'], 'y': df['Net Amount'], 'type': 'scatter', 'mode': 'markers'}
             ],
             'layout': {
                 'title' : 'Dash Data Visualization'
-
             }
         }
-    ),
-
-        dcc.Graph(
-            id='example-graph',
-            figure={
-                'data': [
-                    {'x': df['Adults'], 'y': df['Net Amount'], 'type': 'scatter', 'mode': 'markers'}
-                ],
-                'layout': {
-                    'title' : 'Dash Data Visualization'
-                }
-            }
-        )
+    )
 ])
 
 
